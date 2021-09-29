@@ -1,0 +1,27 @@
+{
+  "name": "lex-order-coffee-validation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "jest": {
+    "AWS_REGION": "us-west-2"
+  },
+  "scripts": {
+    "test": "jest",
+    "watch": "jest --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.984.0",
+    "chai": "^4.3.4",
+    "es6-promisify": "^7.0.0",
+    "jest": "^27.2.0",
+    "lodash": "^4.17.21",
+    "serverless": "^2.57.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.1"
+  }
+}
