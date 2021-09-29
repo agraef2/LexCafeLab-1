@@ -68,6 +68,7 @@ functions:
       Resource:
         - "Fn::Join": ["", ["arn:aws:dynamodb:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":table/coffee-order-table*"]]
         - "Fn::Join": ["", ["arn:aws:dynamodb:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":table/coffee-user-table*"]]
+        - "Fn::Join": ["", ["arn:aws:dynamodb:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":table/food-user-table*"]]
  
   saveUserFavorites:
     handler: handler.saveUserFavorites
@@ -79,7 +80,18 @@ functions:
               - CoffeeOrdersTable
               - StreamArn
           batchSize: 1
-          startingPosition: LATEST     
+          startingPosition: LATEST  
+  saveUserFoodFavorites:
+    handler: handler.saveUserFoodFavorites
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt:
+              - FoodOrdersTable
+              - StreamArn
+          batchSize: 1
+          startingPosition: LATEST      
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -138,7 +150,7 @@ resources:
         TableName: "coffee-order-table"
         StreamSpecification:
           StreamViewType: NEW_IMAGE
-    CoffeeUserTable:
+    CafeUserTable:
       Type: "AWS::DynamoDB::Table"
       Properties:
         AttributeDefinitions:
@@ -150,7 +162,22 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: "coffee-user-table"
+        TableName: "cafe-user-table"
+    FoodOrdersTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: "orderId"
+          AttributeType: "S"
+        KeySchema:
+        - AttributeName: "orderId"
+          KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "food-order-table"
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
 #resources:
 #  Resources:
 #    NewResource:

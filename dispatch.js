@@ -2,6 +2,7 @@
 
 const orderCoffee = require("./orderCoffee");
 const greetUser = require("./greetUser");
+const orderFood = require("./orderFood");
 
 module.exports = async function (intentRequest, callback) {
   console.log(
@@ -17,6 +18,11 @@ module.exports = async function (intentRequest, callback) {
   } else if (intentName === "Greeting") {
     console.log(intentName + "was called");
     const response = await greetUser(intentRequest);
+    console.log(response);
+    callback(response);
+  } else if (intentName === "FoodOrder") {
+    console.log(intentName + "was called");
+    const response = await orderFood(intentRequest);
     console.log(response);
     callback(response);
   } else {

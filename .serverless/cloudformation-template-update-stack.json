@@ -83,6 +83,12 @@
         "LogGroupName": "/aws/lambda/lex-order-coffee-validation-dev-saveUserFavorites"
       }
     },
+    "SaveUserFoodFavoritesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/lex-order-coffee-validation-dev-saveUserFoodFavorites"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -156,6 +162,23 @@
                       ]
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:ListStreams"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "FoodOrdersTable",
+                        "StreamArn"
+                      ]
+                    }
+                  ]
                 }
               ]
             }
@@ -184,7 +207,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lex-order-coffee-validation/dev/1631732301272-2021-09-15T18:58:21.272Z/lex-order-coffee-validation.zip"
+          "S3Key": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z/lex-order-coffee-validation.zip"
         },
         "Handler": "handler.intents",
         "Runtime": "nodejs12.x",
@@ -209,7 +232,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lex-order-coffee-validation/dev/1631732301272-2021-09-15T18:58:21.272Z/lex-order-coffee-validation.zip"
+          "S3Key": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z/lex-order-coffee-validation.zip"
         },
         "Handler": "handler.saveUserFavorites",
         "Runtime": "nodejs12.x",
@@ -227,24 +250,59 @@
         "SaveUserFavoritesLogGroup"
       ]
     },
-    "IntentsLambdaVersionwmqHAT4k1aQbhDbCIPwyQyQ0ssKVQQ5qY51261n0": {
+    "SaveUserFoodFavoritesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z/lex-order-coffee-validation.zip"
+        },
+        "Handler": "handler.saveUserFoodFavorites",
+        "Runtime": "nodejs12.x",
+        "FunctionName": "lex-order-coffee-validation-dev-saveUserFoodFavorites",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "SaveUserFoodFavoritesLogGroup"
+      ]
+    },
+    "IntentsLambdaVersionGflbvhmS4umQWjzrVOydSc0QBVinc8smQ2PIyJ9Iwco": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "IntentsLambdaFunction"
         },
-        "CodeSha256": "m3TxnypY2FiJgqlDONFdg8OK8jKGcqb41Aixw0NG6SA="
+        "CodeSha256": "BKKZG6KCRCX8nWFELtqSIrYKapEpLzUNFqBFMPNCpkU="
       }
     },
-    "SaveUserFavoritesLambdaVersionjtsxv5PK6D8b3qGeRg2QyCuPTNZrWPtkIC2uuWc9anY": {
+    "SaveUserFavoritesLambdaVersione0h19lfn8VkHEcqVCTFYXwL6udCHhGSq7oes1YE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SaveUserFavoritesLambdaFunction"
         },
-        "CodeSha256": "m3TxnypY2FiJgqlDONFdg8OK8jKGcqb41Aixw0NG6SA="
+        "CodeSha256": "BKKZG6KCRCX8nWFELtqSIrYKapEpLzUNFqBFMPNCpkU="
+      }
+    },
+    "SaveUserFoodFavoritesLambdaVersionQeoQIMnKOsIEgzDuvsruDBIVwLRAvHZ2pNIFrTUvDQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "SaveUserFoodFavoritesLambdaFunction"
+        },
+        "CodeSha256": "BKKZG6KCRCX8nWFELtqSIrYKapEpLzUNFqBFMPNCpkU="
       }
     },
     "SaveUserFavoritesEventSourceMappingDynamodbCoffeeOrdersTable": {
@@ -263,6 +321,29 @@
         "FunctionName": {
           "Fn::GetAtt": [
             "SaveUserFavoritesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "LATEST",
+        "Enabled": true
+      }
+    },
+    "SaveUserFoodFavoritesEventSourceMappingDynamodbFoodOrdersTable": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "IamRoleLambdaExecution"
+      ],
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "FoodOrdersTable",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SaveUserFoodFavoritesLambdaFunction",
             "Arn"
           ]
         },
@@ -295,7 +376,7 @@
         }
       }
     },
-    "CoffeeUserTable": {
+    "CafeUserTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "AttributeDefinitions": [
@@ -314,7 +395,32 @@
           "ReadCapacityUnits": 1,
           "WriteCapacityUnits": 1
         },
-        "TableName": "coffee-user-table"
+        "TableName": "cafe-user-table"
+      }
+    },
+    "FoodOrdersTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "orderId",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "orderId",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        },
+        "TableName": "food-order-table",
+        "StreamSpecification": {
+          "StreamViewType": "NEW_IMAGE"
+        }
       }
     }
   },
@@ -330,7 +436,7 @@
     "IntentsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "IntentsLambdaVersionwmqHAT4k1aQbhDbCIPwyQyQ0ssKVQQ5qY51261n0"
+        "Ref": "IntentsLambdaVersionGflbvhmS4umQWjzrVOydSc0QBVinc8smQ2PIyJ9Iwco"
       },
       "Export": {
         "Name": "sls-lex-order-coffee-validation-dev-IntentsLambdaFunctionQualifiedArn"
@@ -339,10 +445,19 @@
     "SaveUserFavoritesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SaveUserFavoritesLambdaVersionjtsxv5PK6D8b3qGeRg2QyCuPTNZrWPtkIC2uuWc9anY"
+        "Ref": "SaveUserFavoritesLambdaVersione0h19lfn8VkHEcqVCTFYXwL6udCHhGSq7oes1YE"
       },
       "Export": {
         "Name": "sls-lex-order-coffee-validation-dev-SaveUserFavoritesLambdaFunctionQualifiedArn"
+      }
+    },
+    "SaveUserFoodFavoritesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "SaveUserFoodFavoritesLambdaVersionQeoQIMnKOsIEgzDuvsruDBIVwLRAvHZ2pNIFrTUvDQ"
+      },
+      "Export": {
+        "Name": "sls-lex-order-coffee-validation-dev-SaveUserFoodFavoritesLambdaFunctionQualifiedArn"
       }
     }
   }
