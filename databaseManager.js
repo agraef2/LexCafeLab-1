@@ -132,3 +132,24 @@ module.exports.findUserFavorite = async function (userId) {
     console.log("ERROR" + "" + error);
   }
 };
+
+module.exports.getStoreInfo = async function (infoType) {
+  let tableName = "store-information-table";
+
+  const params = {
+    TableName: tableName,
+    Key: {
+      infoType,
+    },
+  };
+  try {
+    let response = await dynamodb.get(params).promise();
+    if (_.isEmpty(response)) {
+      console.log(`Info type of :${infoType} not found`);
+      return Promise.reject(new Error(`Info type of :${infoType} not found`));
+    }
+    return response.Item;
+  } catch (error) {
+    console.log("ERROR" + "" + error);
+  }
+};

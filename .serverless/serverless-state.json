@@ -220,7 +220,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z/lex-order-coffee-validation.zip"
+                "S3Key": "serverless/lex-order-coffee-validation/dev/1633380469095-2021-10-04T20:47:49.095Z/lex-order-coffee-validation.zip"
               },
               "Handler": "handler.intents",
               "Runtime": "nodejs12.x",
@@ -245,7 +245,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z/lex-order-coffee-validation.zip"
+                "S3Key": "serverless/lex-order-coffee-validation/dev/1633380469095-2021-10-04T20:47:49.095Z/lex-order-coffee-validation.zip"
               },
               "Handler": "handler.saveUserFavorites",
               "Runtime": "nodejs12.x",
@@ -270,7 +270,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z/lex-order-coffee-validation.zip"
+                "S3Key": "serverless/lex-order-coffee-validation/dev/1633380469095-2021-10-04T20:47:49.095Z/lex-order-coffee-validation.zip"
               },
               "Handler": "handler.saveUserFoodFavorites",
               "Runtime": "nodejs12.x",
@@ -288,34 +288,34 @@
               "SaveUserFoodFavoritesLogGroup"
             ]
           },
-          "IntentsLambdaVersionGflbvhmS4umQWjzrVOydSc0QBVinc8smQ2PIyJ9Iwco": {
+          "IntentsLambdaVersion8J3RajF2Xzf3cB2gJM1QhVAS8LF2vQTBnmKZ0aIb7U": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "IntentsLambdaFunction"
               },
-              "CodeSha256": "BKKZG6KCRCX8nWFELtqSIrYKapEpLzUNFqBFMPNCpkU="
+              "CodeSha256": "2yai2gnN/nLAPWiV8I8VKVFrdoRT6/pzq4aj8/cAUnQ="
             }
           },
-          "SaveUserFavoritesLambdaVersione0h19lfn8VkHEcqVCTFYXwL6udCHhGSq7oes1YE": {
+          "SaveUserFavoritesLambdaVersiongbHV9n9B1yu51CnPU19XDwFJqex6EPFnllVcFzznk4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SaveUserFavoritesLambdaFunction"
               },
-              "CodeSha256": "BKKZG6KCRCX8nWFELtqSIrYKapEpLzUNFqBFMPNCpkU="
+              "CodeSha256": "2yai2gnN/nLAPWiV8I8VKVFrdoRT6/pzq4aj8/cAUnQ="
             }
           },
-          "SaveUserFoodFavoritesLambdaVersionQeoQIMnKOsIEgzDuvsruDBIVwLRAvHZ2pNIFrTUvDQ": {
+          "SaveUserFoodFavoritesLambdaVersion5f5kOkfdidgsnezJBxnGFfRFqo3dN4ZYOwBSXFO7AA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SaveUserFoodFavoritesLambdaFunction"
               },
-              "CodeSha256": "BKKZG6KCRCX8nWFELtqSIrYKapEpLzUNFqBFMPNCpkU="
+              "CodeSha256": "2yai2gnN/nLAPWiV8I8VKVFrdoRT6/pzq4aj8/cAUnQ="
             }
           },
           "SaveUserFavoritesEventSourceMappingDynamodbCoffeeOrdersTable": {
@@ -435,6 +435,28 @@
                 "StreamViewType": "NEW_IMAGE"
               }
             }
+          },
+          "StoreInfoTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "infoType",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "infoType",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 1,
+                "WriteCapacityUnits": 1
+              },
+              "TableName": "store-information-table"
+            }
           }
         },
         "Outputs": {
@@ -449,7 +471,7 @@
           "IntentsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "IntentsLambdaVersionGflbvhmS4umQWjzrVOydSc0QBVinc8smQ2PIyJ9Iwco"
+              "Ref": "IntentsLambdaVersion8J3RajF2Xzf3cB2gJM1QhVAS8LF2vQTBnmKZ0aIb7U"
             },
             "Export": {
               "Name": "sls-lex-order-coffee-validation-dev-IntentsLambdaFunctionQualifiedArn"
@@ -458,7 +480,7 @@
           "SaveUserFavoritesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SaveUserFavoritesLambdaVersione0h19lfn8VkHEcqVCTFYXwL6udCHhGSq7oes1YE"
+              "Ref": "SaveUserFavoritesLambdaVersiongbHV9n9B1yu51CnPU19XDwFJqex6EPFnllVcFzznk4"
             },
             "Export": {
               "Name": "sls-lex-order-coffee-validation-dev-SaveUserFavoritesLambdaFunctionQualifiedArn"
@@ -467,7 +489,7 @@
           "SaveUserFoodFavoritesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SaveUserFoodFavoritesLambdaVersionQeoQIMnKOsIEgzDuvsruDBIVwLRAvHZ2pNIFrTUvDQ"
+              "Ref": "SaveUserFoodFavoritesLambdaVersion5f5kOkfdidgsnezJBxnGFfRFqo3dN4ZYOwBSXFO7AA"
             },
             "Export": {
               "Name": "sls-lex-order-coffee-validation-dev-SaveUserFoodFavoritesLambdaFunctionQualifiedArn"
@@ -628,7 +650,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "IntentsLambdaVersionGflbvhmS4umQWjzrVOydSc0QBVinc8smQ2PIyJ9Iwco"
+        "versionLogicalId": "IntentsLambdaVersion8J3RajF2Xzf3cB2gJM1QhVAS8LF2vQTBnmKZ0aIb7U"
       },
       "saveUserFavorites": {
         "handler": "handler.saveUserFavorites",
@@ -650,7 +672,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "SaveUserFavoritesLambdaVersione0h19lfn8VkHEcqVCTFYXwL6udCHhGSq7oes1YE"
+        "versionLogicalId": "SaveUserFavoritesLambdaVersiongbHV9n9B1yu51CnPU19XDwFJqex6EPFnllVcFzznk4"
       },
       "saveUserFoodFavorites": {
         "handler": "handler.saveUserFoodFavorites",
@@ -672,7 +694,7 @@
         "timeout": 6,
         "runtime": "nodejs12.x",
         "vpc": {},
-        "versionLogicalId": "SaveUserFoodFavoritesLambdaVersionQeoQIMnKOsIEgzDuvsruDBIVwLRAvHZ2pNIFrTUvDQ"
+        "versionLogicalId": "SaveUserFoodFavoritesLambdaVersion5f5kOkfdidgsnezJBxnGFfRFqo3dN4ZYOwBSXFO7AA"
       }
     },
     "resources": {
@@ -748,6 +770,28 @@
               "StreamViewType": "NEW_IMAGE"
             }
           }
+        },
+        "StoreInfoTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "infoType",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "infoType",
+                "KeyType": "HASH"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            },
+            "TableName": "store-information-table"
+          }
         }
       },
       "Outputs": {}
@@ -774,7 +818,7 @@
     "artifact": "C:\\Users\\Austin.Graef\\LexCafeLab\\.serverless\\lex-order-coffee-validation.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/lex-order-coffee-validation/dev/1632953766565-2021-09-29T22:16:06.565Z",
+    "artifactDirectoryName": "serverless/lex-order-coffee-validation/dev/1633380469095-2021-10-04T20:47:49.095Z",
     "artifact": "lex-order-coffee-validation.zip"
   }
 }

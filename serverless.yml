@@ -178,6 +178,19 @@ resources:
         TableName: "food-order-table"
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+    StoreInfoTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+        - AttributeName: "infoType"
+          AttributeType: "S"
+        KeySchema:
+        - AttributeName: "infoType"
+          KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: "store-information-table"
 #resources:
 #  Resources:
 #    NewResource:

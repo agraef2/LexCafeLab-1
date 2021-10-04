@@ -3,6 +3,7 @@
 const orderCoffee = require("./orderCoffee");
 const greetUser = require("./greetUser");
 const orderFood = require("./orderFood");
+const getStoreInfo = require("./storeInfo");
 
 module.exports = async function (intentRequest, callback) {
   console.log(
@@ -25,6 +26,11 @@ module.exports = async function (intentRequest, callback) {
     const response = await orderFood(intentRequest);
     console.log(response);
     callback(response);
+  }  else if (intentName === "StoreInformation") {
+    console.log(intentName + "was called");
+    const response = await getStoreInfo(intentRequest);
+    console.log(response);
+    callback(response)
   } else {
     throw new Error(`Intent with name ${intentName} not supported`);
   }
