@@ -21,7 +21,6 @@ function buildValidationResult(isValid, violatedSlot, messageContent) {
 }
 
 async function validateCoffeeOrder(coffeeType, coffeeSize) {
-  
   if (coffeeType && types.indexOf(coffeeType.toLowerCase()) === -1) {
     return buildValidationResult(
       false,
@@ -94,17 +93,21 @@ function buildFulfillmentResult(fulfillmentState, messageContent) {
 }
 
 function buildUserFavoriteResult(coffee, size, messageContent) {
-    return {
-      coffee,
-      size,
-      message: { contentType: 'PlainText', content: messageContent }
-    };
+  return {
+    coffee,
+    size,
+    message: { contentType: "PlainText", content: messageContent },
+  };
 }
 
 async function findUserFavorite(userId) {
-    let result = await databaseManager.findUserFavorite(userId);
-    console.log('findUserFavorite result' + ' ' + JSON.stringify(result));
-    return buildUserFavoriteResult(result.drink, result.size, `Would you like to order a ${result.size} ${result.drink}?`);
+  let result = await databaseManager.findUserFavorite(userId);
+  console.log("findUserFavorite result" + " " + JSON.stringify(result));
+  return buildUserFavoriteResult(
+    result.drink,
+    result.size,
+    `Would you like to order a ${result.size} ${result.drink}?`
+  );
 }
 
 async function fulfillOrder(userId, coffeeType, coffeeSize) {
@@ -117,13 +120,13 @@ async function fulfillOrder(userId, coffeeType, coffeeSize) {
 
   return buildFulfillmentResult(
     "Fulfilled",
-    `Thanks, your orderid ${result.orderId} has been placed`
+    `Thanks, your order has been placed`
   );
 }
 
 module.exports = async function (intentRequest) {
   let coffeeType = intentRequest.currentIntent.slots.coffee;
-  let coffeeSize = intentRequest.currentIntent.slots.size
+  let coffeeSize = intentRequest.currentIntent.slots.size;
   let userId = intentRequest.userId;
   console.log(coffeeType + " " + coffeeSize);
 
@@ -133,45 +136,48 @@ module.exports = async function (intentRequest) {
     const slots = intentRequest.currentIntent.slots;
 
     if (coffeeType === null && coffeeSize === null) {
-        try {
-          let result = await findUserFavorite(userId);
-          console.log("GET RESULT" + " " + JSON.stringify(result));
-          if (result) {
-            slots.size = result.size;
-            slots.coffee = result.coffee;
-          }
-          console.log("ABOUT TO CONFIRM INTENT");
-          //Ask the user if he will like to order this item
-          return lexResponses.confirmIntent(
-            intentRequest.sessionAttributes,
-            intentRequest.currentIntent.name,
-            slots,
-            result.message
-          );
-        } catch {
-          //Need to ask the user what they want coffee they want?
-          return lexResponses.delegate(
-            intentRequest.sessionAttributes,
-            intentRequest.currentIntent.slots
-          );
+      try {
+        let result = await findUserFavorite(userId);
+        console.log("GET RESULT" + " " + JSON.stringify(result));
+        if (result) {
+          slots.size = result.size;
+          slots.coffee = result.coffee;
         }
+        console.log("ABOUT TO CONFIRM INTENT");
+        //Ask the user if he will like to order this item
+        return lexResponses.confirmIntent(
+          intentRequest.sessionAttributes,
+          intentRequest.currentIntent.name,
+          slots,
+          result.message
+        );
+      } catch {
+        //Need to ask the user what they want coffee they want?
+        return lexResponses.delegate(
+          intentRequest.sessionAttributes,
+          intentRequest.currentIntent.slots
+        );
+      }
     } else {
-        const validationResult = await validateCoffeeOrder(coffeeType, coffeeSize);
-        console.log("validationResult" + JSON.stringify(validationResult));
+      const validationResult = await validateCoffeeOrder(
+        coffeeType,
+        coffeeSize
+      );
+      console.log("validationResult" + JSON.stringify(validationResult));
 
-        if (!validationResult.isValid) {
-            return lexResponses.elicitSlot(
-                intentRequest.sessionAttributes,
-                intentRequest.currentIntent.name,
-                slots,
-                validationResult.violatedSlot,
-                validationResult.message
-            );
-          }
-          return lexResponses.delegate(
-              intentRequest.sessionAttributes,
-              intentRequest.currentIntent.slots
-          );
+      if (!validationResult.isValid) {
+        return lexResponses.elicitSlot(
+          intentRequest.sessionAttributes,
+          intentRequest.currentIntent.name,
+          slots,
+          validationResult.violatedSlot,
+          validationResult.message
+        );
+      }
+      return lexResponses.delegate(
+        intentRequest.sessionAttributes,
+        intentRequest.currentIntent.slots
+      );
     }
   }
 
