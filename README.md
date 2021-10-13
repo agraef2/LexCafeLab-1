@@ -11,3 +11,4 @@ Deploying the application:
 Logging into AWS console:
   - aws-azure-login --mode=gui
 
+
