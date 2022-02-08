@@ -6,14 +6,14 @@ const databaseManager = require("./databaseManager");
 const options = ["breakfast sandwich", "bagel", "cookie"];
 
 module.exports = async function (intentRequest) {
-  let foodType = intentRequest.currentIntent.slots.foodType;
-  let userId = intentRequest.userId;
+  let foodType = intentRequest.sessionState.intent.slots.foodType !== null ? intentRequest.sessionState.intent.slots.foodType.value.interpretedValue : "";
+  let userId = intentRequest.sessionId;
   console.log(foodType);
 
   const source = intentRequest.invocationSource;
 
   if (source === "DialogCodeHook") {
-    const slots = intentRequest.currentIntent.slots;
+    const slots = intentRequest.sessionState.intent.slots;
     if (foodType !== null) {
       const validationResult = await validateFoodOrder(foodType);
       console.log("validationResult" + JSON.stringify(validationResult));
@@ -21,7 +21,7 @@ module.exports = async function (intentRequest) {
       if (!validationResult.isValid) {
         return lexResponses.elicitSlot(
           intentRequest.sessionAttributes,
-          intentRequest.currentIntent.name,
+          intentRequest.sessionState.intent.name,
           slots,
           validationResult.violatedSlot,
           validationResult.message
@@ -31,7 +31,7 @@ module.exports = async function (intentRequest) {
 
     return lexResponses.delegate(
       intentRequest.sessionAttributes,
-      intentRequest.currentIntent.slots
+      slots
     );
   } else if (source === "FulfillmentCodeHook") {
     console.log("fulfillmetCodeHook");

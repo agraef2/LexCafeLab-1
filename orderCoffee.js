@@ -125,38 +125,61 @@ async function fulfillOrder(userId, coffeeType, coffeeSize) {
 }
 
 module.exports = async function (intentRequest) {
-  let coffeeType = intentRequest.currentIntent.slots.coffee;
-  let coffeeSize = intentRequest.currentIntent.slots.size;
-  let userId = intentRequest.userId;
+  console.log("intentRequest " + JSON.stringify(intentRequest));
+  let coffeeType =
+    intentRequest.sessionState.intent.slots.coffee !== null
+      ? intentRequest.sessionState.intent.slots.coffee.value.interpretedValue
+      : "";
+  let coffeeSize =
+    intentRequest.sessionState.intent.slots.size !== null
+      ? intentRequest.sessionState.intent.slots.size.value.interpretedValue
+      : "";
+  let userId = intentRequest.sessionId;
+  let intentName = intentRequest.sessionState.intent.name;
   console.log(coffeeType + " " + coffeeSize);
 
   const source = intentRequest.invocationSource;
 
   if (source === "DialogCodeHook") {
-    const slots = intentRequest.currentIntent.slots;
+    const slots = intentRequest.sessionState.intent.slots;
 
-    if (coffeeType === null && coffeeSize === null) {
+    if (coffeeType === "" && coffeeSize === "") {
       try {
         let result = await findUserFavorite(userId);
         console.log("GET RESULT" + " " + JSON.stringify(result));
         if (result) {
-          slots.size = result.size;
-          slots.coffee = result.coffee;
-        }
+          coffeeType = result.coffee;
+          coffeeSize = result.size;
+        
         console.log("ABOUT TO CONFIRM INTENT");
         //Ask the user if he will like to order this item
         return lexResponses.confirmIntent(
           intentRequest.sessionAttributes,
-          intentRequest.currentIntent.name,
-          slots,
+          intentName,
+          {
+            size: {
+              shape: "Scalar",
+              value: {
+                originalValue: coffeeSize,
+                resolvedValues: [],
+                interpretedValue: coffeeSize,
+              },
+            },
+            coffee: {
+              shape: "Scalar",
+              value: {
+                originalValue: coffeeType,
+                resolvedValues: [],
+                interpretedValue: coffeeType,
+              },
+            },
+          },
           result.message
         );
+        }
       } catch {
         //Need to ask the user what they want coffee they want?
-        return lexResponses.delegate(
-          intentRequest.sessionAttributes,
-          intentRequest.currentIntent.slots
-        );
+        return lexResponses.delegate(intentRequest.sessionAttributes, slots);
       }
     } else {
       const validationResult = await validateCoffeeOrder(
@@ -168,7 +191,7 @@ module.exports = async function (intentRequest) {
       if (!validationResult.isValid) {
         return lexResponses.elicitSlot(
           intentRequest.sessionAttributes,
-          intentRequest.currentIntent.name,
+          intentName,
           slots,
           validationResult.violatedSlot,
           validationResult.message
@@ -176,7 +199,7 @@ module.exports = async function (intentRequest) {
       }
       return lexResponses.delegate(
         intentRequest.sessionAttributes,
-        intentRequest.currentIntent.slots
+        intentRequest.sessionState.intent.slots
       );
     }
   }
@@ -188,7 +211,8 @@ module.exports = async function (intentRequest) {
     return lexResponses.close(
       intentRequest.sessionAttributes,
       fulfilledOrder.fulfillmentState,
-      fulfilledOrder.message
+      fulfilledOrder.message,
+      intentName
     );
   }
 };

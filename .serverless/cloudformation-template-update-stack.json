@@ -207,7 +207,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lex-order-coffee-validation/dev/1633444993710-2021-10-05T14:43:13.710Z/lex-order-coffee-validation.zip"
+          "S3Key": "serverless/lex-order-coffee-validation/dev/1644344697833-2022-02-08T18:24:57.833Z/lex-order-coffee-validation.zip"
         },
         "Handler": "handler.intents",
         "Runtime": "nodejs12.x",
@@ -232,7 +232,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lex-order-coffee-validation/dev/1633444993710-2021-10-05T14:43:13.710Z/lex-order-coffee-validation.zip"
+          "S3Key": "serverless/lex-order-coffee-validation/dev/1644344697833-2022-02-08T18:24:57.833Z/lex-order-coffee-validation.zip"
         },
         "Handler": "handler.saveUserFavorites",
         "Runtime": "nodejs12.x",
@@ -257,7 +257,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lex-order-coffee-validation/dev/1633444993710-2021-10-05T14:43:13.710Z/lex-order-coffee-validation.zip"
+          "S3Key": "serverless/lex-order-coffee-validation/dev/1644344697833-2022-02-08T18:24:57.833Z/lex-order-coffee-validation.zip"
         },
         "Handler": "handler.saveUserFoodFavorites",
         "Runtime": "nodejs12.x",
@@ -275,34 +275,34 @@
         "SaveUserFoodFavoritesLogGroup"
       ]
     },
-    "IntentsLambdaVersiona8o2tvIt15lwsg9yHIVf96t9KbVffwfsFielggMgcc": {
+    "IntentsLambdaVersiondxm1i3lEcCtSuR97uFykrum9LOnAKmsrjxEgAPBbO4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "IntentsLambdaFunction"
         },
-        "CodeSha256": "ddoxhfdebF8X1FEDG984l6fRMMQLDoEFyTIHJM7hAUY="
+        "CodeSha256": "6RNL3vvcJSmT78+1hzCVFVzYojMkTCrEQoyPVRhkQQE="
       }
     },
-    "SaveUserFavoritesLambdaVersionMmTzqHcJS5f3nJFM2HOOi1iFmLuoX60apTk4xA1p8": {
+    "SaveUserFavoritesLambdaVersionJCTU7ouiBMaSmYTj3FXw29gMkoYXaLPHYUxBESe8M": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SaveUserFavoritesLambdaFunction"
         },
-        "CodeSha256": "ddoxhfdebF8X1FEDG984l6fRMMQLDoEFyTIHJM7hAUY="
+        "CodeSha256": "6RNL3vvcJSmT78+1hzCVFVzYojMkTCrEQoyPVRhkQQE="
       }
     },
-    "SaveUserFoodFavoritesLambdaVersionyxnG4XcRIMV0Lhcco0DzuaUiuOUFbRRir4Igo02U": {
+    "SaveUserFoodFavoritesLambdaVersionrMd8QXGRr4O4J2zCpesRsC1If6ev9CcKofMSRmRyrU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SaveUserFoodFavoritesLambdaFunction"
         },
-        "CodeSha256": "ddoxhfdebF8X1FEDG984l6fRMMQLDoEFyTIHJM7hAUY="
+        "CodeSha256": "6RNL3vvcJSmT78+1hzCVFVzYojMkTCrEQoyPVRhkQQE="
       }
     },
     "SaveUserFavoritesEventSourceMappingDynamodbCoffeeOrdersTable": {
@@ -458,7 +458,7 @@
     "IntentsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "IntentsLambdaVersiona8o2tvIt15lwsg9yHIVf96t9KbVffwfsFielggMgcc"
+        "Ref": "IntentsLambdaVersiondxm1i3lEcCtSuR97uFykrum9LOnAKmsrjxEgAPBbO4"
       },
       "Export": {
         "Name": "sls-lex-order-coffee-validation-dev-IntentsLambdaFunctionQualifiedArn"
@@ -467,7 +467,7 @@
     "SaveUserFavoritesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SaveUserFavoritesLambdaVersionMmTzqHcJS5f3nJFM2HOOi1iFmLuoX60apTk4xA1p8"
+        "Ref": "SaveUserFavoritesLambdaVersionJCTU7ouiBMaSmYTj3FXw29gMkoYXaLPHYUxBESe8M"
       },
       "Export": {
         "Name": "sls-lex-order-coffee-validation-dev-SaveUserFavoritesLambdaFunctionQualifiedArn"
@@ -476,7 +476,7 @@
     "SaveUserFoodFavoritesLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SaveUserFoodFavoritesLambdaVersionyxnG4XcRIMV0Lhcco0DzuaUiuOUFbRRir4Igo02U"
+        "Ref": "SaveUserFoodFavoritesLambdaVersionrMd8QXGRr4O4J2zCpesRsC1If6ev9CcKofMSRmRyrU"
       },
       "Export": {
         "Name": "sls-lex-order-coffee-validation-dev-SaveUserFoodFavoritesLambdaFunctionQualifiedArn"

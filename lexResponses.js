@@ -2,10 +2,17 @@
 
 module.exports.delegate = function (sessionAttributes, slots) {
   return {
-    sessionAttributes,
-    dialogAction: {
-      type: "Delegate",
-      slots,
+    sessionState: {
+      sessionAttributes,
+      dialogAction: {
+        type: "Delegate",
+      },
+      intent: {
+        slots,
+        confirmationState: "None",
+        name: "CoffeeOrder",
+        state: "InProgress",
+      },
     },
   };
 };
@@ -17,35 +24,79 @@ module.exports.elicitSlot = function (
   message
 ) {
   return {
-    sessionAttributes,
-    dialogAction: {
-      type: "ElicitSlot",
-      intentName,
-      slots,
-      slotToElicit,
-      message,
+    sessionState: {
+      sessionAttributes,
+      dialogAction: {
+        type: "ElicitSlot",
+        slotToElicit,
+      },
+      intent: {
+        slots,
+        confirmationState: "None",
+        name: "CoffeeOrder",
+        state: "InProgress",
+      },
     },
+    messages: [
+      {
+        contentType: "PlainText",
+        content: message.content,
+      },
+    ],
   };
 };
-module.exports.close = function (sessionAttributes, fulfillmentState, message) {
+module.exports.close = function (
+  sessionAttributes,
+  fulfillmentState,
+  message,
+  intentName
+) {
   return {
-    sessionAttributes,
-    dialogAction: {
-      type: "Close",
-      fulfillmentState,
-      message,
+    sessionState: {
+      sessionAttributes,
+      dialogAction: {
+        type: "Close",
+        fulfillmentState,
+      },
+      intent: {
+        confirmationState: "Confirmed",
+        name: intentName,
+        state: "Fulfilled",
+      },
     },
+    messages: [
+      {
+        contentType: "PlainText",
+        content: message.content,
+      },
+    ],
   };
 };
 
-module.exports.confirmIntent = function(sessionAttributes, intentName, slots, message) {
-    return {
+module.exports.confirmIntent = function (
+  sessionAttributes,
+  intentName,
+  slots,
+  message
+) {
+  return {
+    sessionState: {
       sessionAttributes,
       dialogAction: {
-        type: 'ConfirmIntent',
-        intentName,
+        type: "ConfirmIntent",
+      },
+      intent: {
         slots,
-        message
-      }
-    };
+        confirmationState: "None",
+        name: "CoffeeOrder",
+        state: "InProgress",
+      },
+      messages: [
+        {
+          contentType: "PlainText",
+          content: JSON.stringify(message),
+        },
+      ],
+    },
   };
+};
